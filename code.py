@@ -1,11 +1,43 @@
+# TODO fix class. This should be fairly easy. get the class to work, call it for each open qlabel in the interface.ui
+#
+
+
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel 
 from PyQt5 import QtGui, uic
 from PyQt5.QtGui import QPixmap
 import sys, os
 from PIL import Image
 
+import boto3
+import uuid
 
-image1 = Image.open("img049.jpg")
+# Class to display a thumbnail image
+class Photothumbnail:
+    def __init__(self, prefix, suffix):
+        #self.bucketName = bucketName
+        #self.objectName = objectName
+        #self.fileName = fileName
+        self.prefix = prefix
+        self.suffix = suffix
+
+    def getObjectName(self):
+        return self.prefix + self.suffix + ".jpg"
+
+    def getFileName(self):
+        return "/tmp/" + "s3image" + str(uuid.uuid1())
+
+    def downLoad(self):
+        s3.meta.client.download_file("newtestbucket25324dhfghgfhd8gds0", self.getObjectName, self.getFileName)
+
+
+
+s3 = boto3.resource("s3")
+
+
+# image34 = "/tmp/" + "s3image" + str(uuid.uuid1())
+# s3.meta.client.download_file("newtestbucket25324dhfghgfhd8gds0", "Picture1.jpg", image34)
+
+image1 = Image.open(Photothumbnail.downLoad("Picture", "1"))
 
 width, height = image1.size
 newSize = (300, 300)
