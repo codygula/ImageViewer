@@ -65,6 +65,7 @@ class Ui(QDialog):
         uic.loadUi("interface.ui", self) # Load the .ui file
         self.show() # Show the GUI
 
+# TODO This whole thing obviously needs to be redone.
 
         vbox = QVBoxLayout()
         labelImage = QLabel(self)
