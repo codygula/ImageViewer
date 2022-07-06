@@ -67,12 +67,12 @@ class Ui(QDialog):
 
 # TODO This whole thing obviously needs to be redone.
 
-        vbox = QVBoxLayout()
+        vbox1 = QVBoxLayout()
         labelImage = QLabel(self)
         pixmap = QPixmap("thumbnailimg1.jpg")
         labelImage.setPixmap(pixmap)
-        vbox.addWidget(labelImage)
-        self.Photo1.setLayout(vbox)
+        vbox1.addWidget(labelImage)
+        self.Photo1.setLayout(vbox1)
         self.show()
 
         vbox = QVBoxLayout()
