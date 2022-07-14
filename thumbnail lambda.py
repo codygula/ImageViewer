@@ -1,8 +1,7 @@
-import json
 import boto3
 import uuid
 import time
-# from PIL import Image
+from PIL import Image
 
 
 ##### This function is now able to copy an item from a source bucket, update the database, and put the object in another bucket. It is still not able to 
@@ -14,7 +13,7 @@ client = boto3.resource("dynamodb")
 s3Bucket = s3.Bucket("newtestbucket25324dhfghgfhd8gds0")
 destinationBucket = s3.Bucket("thumbnailimages49f2ng34b0wmw2mv")
 
-table = client.Table("PictureData")  
+table = client.Table("PictureData")
 
 def lambda_handler(event, context):
     
@@ -33,7 +32,7 @@ def lambda_handler(event, context):
     # Copy into /tmp/ 
     response = s3.meta.client.download_file(bucketName, keylocation, thumbfile)
     
-    
+    '''
     # Update database
     Primary_Column_Name = "PictureName"
     
@@ -47,16 +46,26 @@ def lambda_handler(event, context):
             "ThumbnailName": keylocation,
             
         })
-    
-     # copy into /tmp/, update database, resize, copy into destinationbucket
-     
-    # TODO resize images. This requires some effort to get PIL or another library imported into lambda.
     '''
+    # copy into /tmp/, update database, resize, copy into destinationbucket
+    
+    # TODO resize images. This requires some effort to get PIL or another library imported into lambda.
+    
+    
+    # resize image
     im = Image.open(thumbfile)
     width, height = im.size
     print(width, height)
-    '''
-     
+    
+    basewidth = 300
+    wpercent = (basewidth/float(width))
+    hsize = int(height*float(width))
+    im = im.resize((basewidth, hsize), Image.Resampling.HAMMING)        #, Image.ANTIALIAS)
+    
+    width, height = im.size
+    print(width, height)
+    
+    
     object = s3.Object(destinationBucket.name, thumbfile)
 
     result = object.put(Body=open(thumbfile, 'rb'))
