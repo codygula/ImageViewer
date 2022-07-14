@@ -3,6 +3,7 @@ import uuid
 import time
 from PIL import Image
 
+# This works the way it needs to now
 
 s3 = boto3.resource("s3")
 
@@ -35,9 +36,10 @@ def lambda_handler(event, context):
     im = im.resize((basewidth, hsize), Image.BOX)
     width, height = im.size
     print("After Size: ", width, height)
+    im = im.save(thumbfile)
     
     # Write file to thumnail S3 bucket
-    object = s3.Object(destinationBucket.name, thumbfile)
+    object = s3.Object(destinationBucket.name, priKey) 
     result = object.put(Body=open(thumbfile, 'rb'))
     res = result.get('ResponseMetadata')
         
@@ -45,4 +47,4 @@ def lambda_handler(event, context):
         print('File Uploaded Successfully')
     else:
         print('File Not Uploaded')
-   
+  
