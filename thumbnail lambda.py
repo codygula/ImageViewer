@@ -1,16 +1,19 @@
+import json
 import boto3
 import uuid
 import time
 from PIL import Image
 
-# This works the way it needs to now
 
 s3 = boto3.resource("s3")
+client = boto3.client('sqs')
 
 s3Bucket = s3.Bucket("newtestbucket25324dhfghgfhd8gds0")
 destinationBucket = s3.Bucket("thumbnailimages49f2ng34b0wmw2mv")
 
+
 def lambda_handler(event, context):
+    
     
     bucketlocation = event['Records'][0]['s3']['bucket']['name']
     
@@ -39,7 +42,7 @@ def lambda_handler(event, context):
     im = im.save(thumbfile)
     
     # Write file to thumnail S3 bucket
-    object = s3.Object(destinationBucket.name, priKey) 
+    object = s3.Object(destinationBucket.name, priKey)  
     result = object.put(Body=open(thumbfile, 'rb'))
     res = result.get('ResponseMetadata')
         
@@ -47,4 +50,13 @@ def lambda_handler(event, context):
         print('File Uploaded Successfully')
     else:
         print('File Not Uploaded')
-  
+    
+    
+    # send message to SQS 
+    response = client.send_message(
+        QueueUrl='https://sqs.us-west-1.amazonaws.com/929749464795/newTestQueue0000-000-001',
+        MessageBody=str({
+            "priKey": priKey,
+            "keylocation": keylocation
+        }))
+    print(response)
