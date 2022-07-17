@@ -60,3 +60,13 @@ def lambda_handler(event, context):
             "keylocation": keylocation
         }))
     print(response)
+    
+    # send message to metadata SQS
+    
+    response2 = client.send_message(
+        QueueUrl='https://sqs.us-west-1.amazonaws.com/929749464795/MetaDataQueue.fifo',
+        MessageBody=str({
+            "priKey": priKey,
+            "keylocation": keylocation
+        }))
+    print(response2)
