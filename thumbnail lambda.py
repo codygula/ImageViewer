@@ -4,6 +4,7 @@ import uuid
 import time
 from PIL import Image
 
+# Lambda function to create thumbnail images and send SQS messages. TODO Break into separate functions.
 
 s3 = boto3.resource("s3")
 client = boto3.client('sqs')
